@@ -10,6 +10,7 @@ class cuckoo_hash
     void insert(mpz_t  value,int kick_num);
     void show_table();
     void export_table(std::vector<std::string>& out_t);
+    std::vector<int> simple_hash(std::string & value);
     int failuer_num();
     private:
     int kick_num;

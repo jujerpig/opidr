@@ -29,13 +29,13 @@ cuckoo_hash::cuckoo_hash(int table_size,int kick_num)
     if(T[ind1]=="-1") 
     {
         T[ind1]=v;
-        std::cout<<v<<"-->"<<"successfully insert in position: "<<ind1<<std::endl;
+        //std::cout<<v<<"-->"<<"successfully insert in position: "<<ind1<<std::endl;
         return;
     }
     if(T[ind2]=="-1") 
     {
         T[ind2]=v;
-        std::cout<<v<<"-->"<<"successfully insert in position: "<<ind2<<std::endl;
+        //std::cout<<v<<"-->"<<"successfully insert in position: "<<ind2<<std::endl;
         return;
     }
     std::random_device rd; 
@@ -48,7 +48,7 @@ cuckoo_hash::cuckoo_hash(int table_size,int kick_num)
         mpz_t k;
         mpz_init(k);
         __gmpz_set_str(k,kick.c_str(),16);
-        std::cout<<v<<"-->kick "<<kick<<" and inserted into: "<<ind1<<std::endl;
+        //std::cout<<v<<"-->kick "<<kick<<" and inserted into: "<<ind1<<std::endl;
         insert(k,--kick_num);
         
     }
@@ -59,7 +59,7 @@ cuckoo_hash::cuckoo_hash(int table_size,int kick_num)
          mpz_t k;
         mpz_init(k);
         __gmpz_set_str(k,kick.c_str(),16);
-        std::cout<<v<<"-->kick "<<kick <<" and inserted into: "<<ind1<<std::endl;
+        //std::cout<<v<<"-->kick "<<kick <<" and inserted into: "<<ind1<<std::endl;
         insert(k,--kick_num);
     }
 }
@@ -76,4 +76,15 @@ void cuckoo_hash::export_table(std::vector<std::string>& out_t)
 int cuckoo_hash::failuer_num()
 {
     return this->stash.size();
+}
+std::vector<int> cuckoo_hash::simple_hash(std::string &value)
+{
+    mpz_t v;
+    
+    mpz_init_set_str(v,value.c_str(),16);
+    int ind1= Hash(this->table_size,v,SEED1);
+    int ind2=Hash(this->table_size,v,SEED2);
+  
+    std::vector<int> res{ind1,ind2};
+    return res;
 }

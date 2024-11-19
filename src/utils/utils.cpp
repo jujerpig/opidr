@@ -148,3 +148,27 @@ std::string hexToString(std::string & input)
     }
     return res;
 }
+
+int gen_num_under_v(int v)
+{
+    if(v<=1) return v;
+    std::random_device rd;
+    std::mt19937 gen(rd());  
+    std::uniform_int_distribution<> dis(1, v - 1); 
+    return dis(gen);  
+}
+
+std::vector<int> gen_share(int v,int ShareNum)
+{
+    int share_num=gen_num_under_v(ShareNum);
+    std::vector<int>shares;
+    for(int i=share_num;i>1;--i)
+    {
+        int s=gen_num_under_v(v-i);
+       shares.push_back(s);
+       v-=s;
+    }
+    shares.push_back(v);
+    return shares;
+}
+

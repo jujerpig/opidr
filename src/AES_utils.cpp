@@ -44,13 +44,13 @@ std::string decrypt(std::string key, std::string cip)
     {
     ECB_Mode<AES>::Decryption decryption((byte *)key.c_str(), key.length());
     std::string recovered;
-    StringSource(cip, true, new StreamTransformationFilter(decryption, new StringSink(recovered)));
-    std::cout<<"decrypt "<<"-->"<<recovered<<std::endl;
+    StringSource(cip, true, new StreamTransformationFilter(decryption,new StringSink(recovered)));
     return recovered;
     }
     catch(const std::exception& e)
     {
-        std::cout<<"decrypt failure"<<std::endl;
+        //std::cout<<"decrypt failure"<<std::endl;
+        //std::cout<<e.what()<<std::endl;
         return "-1";
     }
     
@@ -77,6 +77,6 @@ std::string HashToKey(std::string & input)
         ss<<std::setw(1)<<std::hex<<c;
 
     }
-    std::cout<<"The hashed symmetric key is: "<<ss.str()<<std::endl;
+    //std::cout<<"The hashed symmetric key is: "<<ss.str()<<std::endl;
     return ss.str();
 }
