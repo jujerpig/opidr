@@ -152,6 +152,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+opidr.obj: opidr.cpp.obj
+.PHONY : opidr.obj
+
+# target to build an object file
+opidr.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/opidr.cpp.obj
+.PHONY : opidr.cpp.obj
+
+opidr.i: opidr.cpp.i
+.PHONY : opidr.i
+
+# target to preprocess a source file
+opidr.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/opidr.cpp.i
+.PHONY : opidr.cpp.i
+
+opidr.s: opidr.cpp.s
+.PHONY : opidr.s
+
+# target to generate assembly for a file
+opidr.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/opidr.cpp.s
+.PHONY : opidr.cpp.s
+
 src/AES_utils.obj: src/AES_utils.cpp.obj
 .PHONY : src/AES_utils.obj
 
@@ -284,6 +308,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... opidr.obj
+	@echo ... opidr.i
+	@echo ... opidr.s
 	@echo ... src/AES_utils.obj
 	@echo ... src/AES_utils.i
 	@echo ... src/AES_utils.s
