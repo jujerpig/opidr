@@ -1,40 +1,35 @@
-#include<iostream>
-#include<vector>
-//#include"include/murmurhash.h"
-#include<gmp.h>
-//#include"cuckoo_hash.h"
-#include"AES_utils.h"
-#include"utils.h"
-#include"soprf.h"
+
+#include"protocol.h"
+#include<map>
+#include <functional>
 using namespace std;
-using namespace CryptoPP;
-mpz_t g;
-mpz_t p;
-int LAMBDA=2048;
-int main()
-{
-    gen_prime(LAMBDA,p);
-    gen_generator(p,g);
-    vector<string>id;
-    for(int i=100;i<=1000;++i)
+
+std::map<std::string, std::function<void(std::vector<std::string>,std::unordered_map<std::string,int>)>> commandMap={
+{"opidr",opidr_protocol}
+};
+int main(int argc, char* argv[])
+{   
+    if(argc<4)
     {
-        id.push_back(to_string(i));
+        cout<<"The cmd is wrong."<<endl
+        <<"Please select a function:"<<endl
+        <<"opidr <alice input path> <bob input path>";
+        return 0;
     }
-    unordered_map<string,int> bob_id_value;
-  
-     for(int i=500;i<=1000;++i)
-    {
-       bob_id_value[to_string(i)]=i;
+    string func,alice_inp_path,bob_inp_path;
+    func=argv[1];
+    alice_inp_path=argv[2];
+    bob_inp_path=argv[3];
+    std::vector<std::string>alice_id;
+    std::unordered_map<std::string,int> bob_id_value;
+    get_input(alice_id,bob_id_value,alice_inp_path,bob_inp_path);
+    auto it = commandMap.find(func);
+    if (it != commandMap.end()) {
+        cout<<"executing "<< func<<"..."<<endl;
+        it->second(alice_id,bob_id_value);
+    } else {
+        cout << "the function doesn't exist: " << std::endl;
+        return 1;
     }
-    vector<string>alice_enc_id,alice_half_key,mac;
-    mpz_t t;
-    alice_round(id,alice_enc_id,alice_half_key, t);
-    vector<string>bob_key,alice_key,symmtric_cipher;
-    bob_round(bob_id_value,alice_half_key,alice_enc_id,alice_key,symmtric_cipher,bob_key,mac);
-    //construct_alice_key(t,alice_key);
-    int intersection=0;
-    
-    int intersection_sum=alice_retrieva_data(t,alice_key,symmtric_cipher,mac);
-    cout<<"intersection sum is: "<<intersection_sum<<endl;
     return 0;
 }

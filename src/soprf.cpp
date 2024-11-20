@@ -3,7 +3,7 @@
 #include<iostream>
 #include"AES_utils.h"
 extern int LAMBDA;
-int EPSILON=3;
+int EPSILON=2;
 extern mpz_t g;
 extern mpz_t p;
 int SHARENUM=3;

@@ -7,8 +7,8 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${CRYPTOPP_DIR} ${GMP_DIR}/inc
 set(CMAKE_CXX_STANDARD 11)
 
 set(SRC ${PROJECT_SOURCE_DIR}/src/Hash/murmurhash.cpp  ${PROJECT_SOURCE_DIR}/src/Hash/cuckoo_hash.cpp main.cpp ${PROJECT_SOURCE_DIR}/src/AES_utils.cpp
- ${PROJECT_SOURCE_DIR}/src/utils/utils.cpp ${PROJECT_SOURCE_DIR}/src/soprf.cpp)
-link_directories( ${GMP_DIR}/.libs ${CRYPTOPP_DIR})
+ ${PROJECT_SOURCE_DIR}/src/utils/utils.cpp ${PROJECT_SOURCE_DIR}/src/soprf.cpp opidr.cpp)
+link_directories( ${GMP_DIR}/.libs ${CRYPTOPP_DIR} )
 
 
 add_executable(main ${SRC})

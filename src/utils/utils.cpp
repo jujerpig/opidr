@@ -5,6 +5,9 @@
 #include<cctype>
 #include <iomanip>  // std::hex, std::setw, std::setfill
 #include <sstream>
+#include <fstream>
+#include<iostream>
+
 void gen_prime( int LAMBDA, mpz_t p)
 {
   gmp_randstate_t state;
@@ -154,17 +157,18 @@ int gen_num_under_v(int v)
     if(v<=1) return v;
     std::random_device rd;
     std::mt19937 gen(rd());  
-    std::uniform_int_distribution<> dis(1, v - 1); 
+    std::uniform_int_distribution<> dis(1, v-1); 
     return dis(gen);  
 }
 
 std::vector<int> gen_share(int v,int ShareNum)
 {
-    int share_num=gen_num_under_v(ShareNum);
+    int share_num=gen_num_under_v(ShareNum+1);
+    //std::cout<<"share nums:"<<share_num<<std::endl;
     std::vector<int>shares;
     for(int i=share_num;i>1;--i)
     {
-        int s=gen_num_under_v(v-i);
+       int s=gen_num_under_v(v-i);
        shares.push_back(s);
        v-=s;
     }
@@ -172,3 +176,36 @@ std::vector<int> gen_share(int v,int ShareNum)
     return shares;
 }
 
+void get_input(std::vector<std::string> &alice_id, std::unordered_map<std::string,int> &bob_id_value,std::string alice_inp_path,std::string bob_inp_path)
+{
+    std::ifstream ids_file(alice_inp_path);
+    if (!ids_file) {
+        std::cout<<"The alice input path doesn't exist."<<std::endl;
+        return ;
+    }
+
+    std::cout << "Reading input data from "<<alice_inp_path<<" and "<<bob_inp_path << std::endl;
+    std::string id;
+    while (std::getline(ids_file, id)) {
+        alice_id.push_back(stringToHex(id));
+    }
+
+    // 读取 id_values.txt
+    std::ifstream id_values_file(bob_inp_path);
+    if (!id_values_file) {
+        std::cout<<"The bob input path doesn't exist."<<std::endl;
+        return ;
+    }
+
+    std::string line;
+    while (std::getline(id_values_file, line)) {
+        std::istringstream iss(line);
+        std::string id;
+        int value;
+
+        if (std::getline(iss, id, ':') && (iss >> value)) {
+            bob_id_value[stringToHex(id)] = value;      
+        }
+    }
+
+}

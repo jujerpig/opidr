@@ -17,11 +17,10 @@ std:: string encrypt(std::string key, std::string pla)
             return "0";
         }
     ECB_Mode<AES>::Encryption e((byte *)key.c_str(), key.length());
-    //e.SetKey()
     std::string cipher;
     StringSource(pla, true, new StreamTransformationFilter(e,new HexEncoder( new StringSink(cipher))));
     //for(unsigned char c: cipher)std::cout<<std::hex<<(int)c<<' ';
-    std::cout<<"encrypt "<<pla<<"-->"<<cipher<<std::endl;
+    //std::cout<<"encrypt "<<pla<<"-->"<<cipher<<std::endl;
     lower(cipher);
     auto hex_cipher=stringToHex(cipher);
 
