@@ -5,8 +5,13 @@
 using namespace std;
 
 std::map<std::string, std::function<void(std::vector<std::string>,std::unordered_map<std::string,int>)>> commandMap={
-{"opidr",opidr_protocol}
+{"opidr",opidr_protocol},
+{"pi_sum",pi_sum_protocol}
 };
+
+mpz_t p,g;
+gmp_randstate_t state;
+
 int main(int argc, char* argv[])
 {   
     if(argc<4)

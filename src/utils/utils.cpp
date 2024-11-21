@@ -8,10 +8,11 @@
 #include <fstream>
 #include<iostream>
 
+extern gmp_randstate_t state;
+  
+
 void gen_prime( int LAMBDA, mpz_t p)
 {
-  gmp_randstate_t state;
-  gmp_randinit_default(state);
   mpz_init(p);
   while(1){
     mpz_urandomb(p,state,LAMBDA);
@@ -68,12 +69,7 @@ std::string gen_rand(int n)
 {
     mpz_t res;
     mpz_init(res);   
-    gmp_randstate_t state;
-    gmp_randinit_default(state);
-    unsigned int seed = static_cast<unsigned int>(time(0)) + rand();
-    gmp_randseed_ui(state, seed);  
     mpz_urandomb(res, state, n); 
-    gmp_randclear(state);
     std::string res_str;
     res_str=mpz_get_str(NULL,16,res);
     return res_str;
@@ -82,18 +78,11 @@ void gen_rand_element(mpz_t v,mpz_t p)
 {
 
     mpz_init(v);
-    gmp_randstate_t state;
-    gmp_randinit_default(state);
-    unsigned int seed = static_cast<unsigned int>(time(0)) + rand();
-    gmp_randseed_ui(state, seed);  
     mpz_urandomm(v,state,p);
-    gmp_randclear(state);
 }
 void gen_parameters(mpz_t g, mpz_t p,int n)
 {
-  gmp_randstate_t state;
-  gmp_randinit_default(state);
-    mpz_t q;
+   mpz_t q;
    mpz_init(q);
    mpz_init(p);
    mpz_init(g);//全局参数：p为prime number;a为 primitive root of p;
@@ -163,7 +152,7 @@ int gen_num_under_v(int v)
 
 std::vector<int> gen_share(int v,int ShareNum)
 {
-    int share_num=gen_num_under_v(ShareNum+1);
+    int share_num=gen_num_under_v(ShareNum);
     //std::cout<<"share nums:"<<share_num<<std::endl;
     std::vector<int>shares;
     for(int i=share_num;i>1;--i)

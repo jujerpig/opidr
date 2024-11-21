@@ -7,7 +7,9 @@ Paillier::Paillier() {
 
 // 析构函数
 Paillier::~Paillier() {
-    mpz_clears(n, n2, g, lambda, mu, nullptr);
+    //mpz_clears(n, n2, g, lambda, mu);
+   // mpz_clear(n);
+
 }
 
 // L(x) = (x - 1) / n
@@ -23,14 +25,14 @@ void Paillier::keygen(unsigned int bits) {
     mpz_inits(p, q, phi, temp, nullptr);
 
     // 随机生成两个大素数 p 和 q
-    gmp_randstate_t state;
-    gmp_randinit_default(state);
-    gmp_randseed_ui(state, time(nullptr));
+    gmp_randstate_t state_pa;
+    gmp_randinit_default(state_pa);
+    gmp_randseed_ui(state_pa, time(nullptr));
 
-    mpz_urandomb(p, state, bits / 2);
+    mpz_urandomb(p, state_pa, bits / 2);
     mpz_nextprime(p, p);
 
-    mpz_urandomb(q, state, bits / 2);
+    mpz_urandomb(q, state_pa, bits / 2);
     mpz_nextprime(q, q);
 
     // 计算 n = p * q
@@ -63,12 +65,12 @@ void Paillier::encrypt(mpz_t& ciphertext, const mpz_t plaintext) {
     mpz_inits(r, rn, temp, nullptr);
 
     // 生成随机数 r ∈ [1, n)
-    gmp_randstate_t state;
-    gmp_randinit_default(state);
-    gmp_randseed_ui(state, time(nullptr));
+    gmp_randstate_t state_pa;
+    gmp_randinit_default(state_pa);
+    gmp_randseed_ui(state_pa, time(nullptr));
 
     do {
-        mpz_urandomm(r, state, n);
+        mpz_urandomm(r, state_pa, n);
     } while (mpz_cmp_ui(r, 0) == 0);
 
     // 计算密文 c = g^m * r^n mod n^2
@@ -91,7 +93,6 @@ void Paillier::decrypt(mpz_t& plaintext, const mpz_t ciphertext) {
     l_function(plaintext, temp);           // plaintext = L(temp)
     mpz_mul(plaintext, plaintext, mu);     // plaintext = L(temp) * μ
     mpz_mod(plaintext, plaintext, n);      // plaintext = plaintext mod n
-
     mpz_clear(temp);
 }
 

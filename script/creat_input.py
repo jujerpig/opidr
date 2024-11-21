@@ -11,7 +11,7 @@ num_entries = 1000
 with open(id_file_name, "w") as id_file, open(id_value_file_name, "w") as id_value_file:
     for i in range(1, num_entries + 1):
         # Generate ID and value
-        id_str = f"id{i}"
+        id_str = f"id_{i}"
         value = random.randint(6, 100)  # Ensure value > 5
 
         # Write to id file

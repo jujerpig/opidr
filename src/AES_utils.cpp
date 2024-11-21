@@ -65,17 +65,18 @@ std::string HashToKey(std::string & input)
     auto str1=dst.substr(0,32);
     auto str2=dst.substr(32,32);
     std::stringstream ss;
-    for(int i=0;i<32;++i)
-    {
-        int c1,c2;
-        if(str1[i]>='0' && str1[i]<='9') c1=str1[i]-'0';
-        else c1=str1[i]-'a'+10;
-        if(str2[i]>='0' && str2[i]<='9') c2=str2[i]-'0';
-        else c2=str2[i]-'a'+10;
-        int c=c1^c2;
-        ss<<std::setw(1)<<std::hex<<c;
+    // for(int i=0;i<32;++i)
+    // {
+    //     int c1,c2;
+    //     if(str1[i]>='0' && str1[i]<='9') c1=str1[i]-'0';
+    //     else c1=str1[i]-'a'+10;
+    //     if(str2[i]>='0' && str2[i]<='9') c2=str2[i]-'0';
+    //     else c2=str2[i]-'a'+10;
+    //     int c=c1^c2;
+    //     ss<<std::setw(1)<<std::hex<<c;
 
-    }
-    //std::cout<<"The hashed symmetric key is: "<<ss.str()<<std::endl;
-    return ss.str();
+    // }
+   
+   // return ss.str();
+   return str1;
 }

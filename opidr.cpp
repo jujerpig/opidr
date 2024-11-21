@@ -1,10 +1,13 @@
 #include"protocol.h"
 #include <chrono>
-mpz_t p,g;
+extern mpz_t p,g;
+extern gmp_randstate_t state;
 int LAMBDA=1024;
 
 void opidr_protocol(std::vector<std::string>id,std::unordered_map<std::string,int> bob_id_value)
 {
+    gmp_randinit_default(state);
+     __gmp_randseed_ui(state, time(nullptr));
     std::cout<<"Generating parameter..."<<std::endl;
     gen_prime(LAMBDA,p);
     gen_generator(p,g);

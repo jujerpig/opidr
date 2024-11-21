@@ -1,18 +1,22 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file",
-            "command": "D:\\strawberry\\c\\bin\\g++.exe",
+            "type": "shell",
+            "label": "debug",
+            "command": "g++",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}\\test.exe"
+                "test.cpp",
+                "src/utils/utils.cpp",
+                "src/hash_dh.cpp",
+                "src/paillier.cpp",
+                "-I\"./include\"",
+                "-I\"D:/cryptopp\"",
+                "-lgmp",
+                "-lcryptopp"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$gcc"

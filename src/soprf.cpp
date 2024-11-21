@@ -2,18 +2,22 @@
 #include"utils.h"
 #include<iostream>
 #include"AES_utils.h"
+#include<fstream>
+#include<chrono>
 extern int LAMBDA;
 int EPSILON=2;
 extern mpz_t g;
 extern mpz_t p;
 int SHARENUM=3;
-void alice_round(std::vector<std::string>& alice_id, std::vector<std::string>& alice_enc_id,std::vector<std::string>& alice_half_key,mpz_t t)
+
+void alice_round(std::vector<mpz_t>& alice_id, std::vector<mpz_t>& alice_enc_id,std::vector<mpz_t>& alice_half_key,mpz_t t)
 {
    
     //mpz_t t;
     gen_rand_element(t,p);
     int n=alice_id.size();
     cuckoo_hash cuc(EPSILON * n,100);
+    auto start = std::chrono::high_resolution_clock::now();
     for(auto id:alice_id)
         {
             mpz_t v;
@@ -21,7 +25,17 @@ void alice_round(std::vector<std::string>& alice_id, std::vector<std::string>& a
             mpz_set_str(v,id.c_str(),16);
             cuc.insert(v,100);
         }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = end - start;
+    std::cout<<"cuckoo_hash insertion time:"<<elapsed.count()<<"ms"<<std::endl;
+
+    start = std::chrono::high_resolution_clock::now();
     cuc.export_table(alice_enc_id);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = end - start;
+    std::cout<<"export cuckoo hash table time:"<<elapsed.count()<<"ms"<<std::endl;
+
+    start = std::chrono::high_resolution_clock::now();
     for(auto &id:alice_enc_id)
     {
         if(id=="-1")
@@ -45,6 +59,9 @@ void alice_round(std::vector<std::string>& alice_id, std::vector<std::string>& a
             alice_half_key.push_back(half_key);
         }
     }
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = end - start;
+    std::cout<<"encrypt alice id  time:"<<elapsed.count()<<"ms"<<std::endl;
 }
 
 
@@ -68,6 +85,7 @@ std::vector<std::string>& mac)
     for(auto &id_value : bob_id_value)
     {
         std::string id=id_value.first;
+        
         int value=id_value.second;
         std::vector<int>shares=gen_share(value,SHARENUM);
         mpz_t bob_id_v;
@@ -102,6 +120,7 @@ std::vector<std::string>& mac)
                 symmetric_cipher.push_back(cipher);
                 auto mac_str=std::to_string(s);
                 mac.push_back(HashToKey(mac_str));
+                //debug_ids.push_back(hexToString(id));
             }    
         }
 
